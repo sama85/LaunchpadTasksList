@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp">
+    >
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/profile_img"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scaleType="center"
-        app:layout_constraintBottom_toTopOf="@+id/guideline_horiz1"
+        app:layout_constraintBottom_toTopOf="@id/horizontal_background"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
@@ -22,6 +22,7 @@
         android:id="@+id/notification_img"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.04"
         app:layout_constraintBottom_toBottomOf="@id/availability_img"
         app:layout_constraintEnd_toStartOf="@id/availability_img"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -34,7 +35,7 @@
         android:id="@+id/availability_img"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/guideline_horiz1"
+        app:layout_constraintBottom_toTopOf="@id/horizontal_background"
         app:layout_constraintDimensionRatio="2:1"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintHorizontal_weight="4"
@@ -47,21 +48,63 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.85" />
+        app:layout_constraintGuide_percent="0.83" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.35" />
+        app:layout_constraintGuide_percent="0.4" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_horiz1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="54dp" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/horizontal_background"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:cardBackgroundColor="#5CEFEABC"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/availability_img"
+        app:cardElevation="0dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width ="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/tasks_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_tasks" />
+
+            <TextView
+                android:id="@+id/tasks_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="مهامك السابقة هنا"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toStartOf="@id/tasks_icon"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginEnd="8dp"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="16dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_arrow_left" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

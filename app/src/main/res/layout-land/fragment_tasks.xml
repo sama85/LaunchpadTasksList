@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scaleType="center"
-        app:layout_constraintBottom_toTopOf="@+id/guideline_horiz1"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_horizontal1"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
@@ -34,7 +34,7 @@
         android:id="@+id/availability_img"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/guideline_horiz1"
+        app:layout_constraintBottom_toTopOf="@id/guideline_horizontal1"
         app:layout_constraintDimensionRatio="2:1"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintHorizontal_weight="4"
@@ -57,7 +57,7 @@
         app:layout_constraintGuide_percent="0.2" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_horiz1"
+        android:id="@+id/guideline_horizontal1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
