@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layoutDirection="rtl"
     android:padding="@dimen/margin_small">
 
@@ -11,9 +11,9 @@
         android:id="@+id/sequence_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_delivery"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_delivery" />
 
     <View
         android:id="@+id/vertical_line"
@@ -21,9 +21,9 @@
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/margin_small"
         android:background="@color/purple_custom"
-        app:layout_constraintHeight_min="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/sequence_img"
+        app:layout_constraintHeight_min="100dp"
         app:layout_constraintStart_toStartOf="@id/sequence_img"
         app:layout_constraintTop_toBottomOf="@id/sequence_img" />
 
@@ -31,54 +31,52 @@
         android:id="@+id/task_id_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="تأكيد استلام الطلبات"
-        android:textSize="@dimen/default_text_size"
-        android:textColor="@color/black"
-        android:textStyle="bold"
         android:layout_marginStart="@dimen/margin_big"
-        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@color/black"
+        android:textSize="@dimen/default_text_size"
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/sequence_img"
-        />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="تأكيد استلام الطلبات" />
 
     <TextView
         android:id="@+id/delivery_time_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="الوصول 08:30 صباحا"
-        app:layout_constraintStart_toStartOf="@id/task_id_text"
-        app:layout_constraintTop_toBottomOf="@id/task_id_text"
         android:layout_marginTop="@dimen/margin_small"
         android:drawableStart="@drawable/ic_alarm"
-        android:drawablePadding="@dimen/margin_very_small"/>
+        android:drawablePadding="@dimen/margin_very_small"
+        android:text="الوصول 08:30 صباحا"
+        app:layout_constraintStart_toStartOf="@id/task_id_text"
+        app:layout_constraintTop_toBottomOf="@id/task_id_text" />
 
     <TextView
         android:id="@+id/status_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/task_id_text"
-        tools:text= "لم تبدأ"
-        android:textSize="16sp"
-        android:textColor="@color/purple_custom"
-        android:textStyle="bold"
         android:drawableStart="@drawable/dot"
         android:drawablePadding="@dimen/margin_very_small"
-        />
-    
+        android:textColor="@color/purple_custom"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/task_id_text"
+        tools:text="لم تبدأ" />
+
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/start_btn"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        app:layout_constraintStart_toStartOf="@id/task_id_text"
-        app:layout_constraintEnd_toEndOf="@id/status_text"
-        app:layout_constraintTop_toBottomOf="@id/delivery_time_text"
         android:layout_marginTop="@dimen/margin_big"
         android:background="@drawable/custom_button"
+        android:drawableStart="@drawable/ic_alert"
         android:text="بدء الرحلة"
         android:textColor="@color/white"
         android:textSize="@dimen/header_text_size_small"
         android:textStyle="bold"
-        android:drawableStart="@drawable/ic_alert" />
-
+        app:layout_constraintEnd_toEndOf="@id/status_text"
+        app:layout_constraintStart_toStartOf="@id/task_id_text"
+        app:layout_constraintTop_toBottomOf="@id/delivery_time_text" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
