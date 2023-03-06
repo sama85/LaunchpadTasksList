@@ -1,8 +1,5 @@
-package com.example.launchpadtaskslist.network
-
 import com.squareup.moshi.Json
-import java.util.Date
-
+import java.util.*
 
 data class TaskContainer(
     val result : List<Task>,
