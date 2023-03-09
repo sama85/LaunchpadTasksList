@@ -41,6 +41,9 @@ dependencies {
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
+    // View model
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$version_lifecycle")
+
     // Navigation
     implementation("androidx.navigation:navigation-fragment-ktx:$version_navigation")
     implementation("androidx.navigation:navigation-ui-ktx:$version_navigation")

@@ -6,6 +6,7 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Headers
 
 private val moshi = Moshi.Builder()
@@ -14,7 +15,9 @@ private val moshi = Moshi.Builder()
 
 
 interface TasksApiService {
-    @Headers("Authorization: $TOKEN")
+    @Headers(
+        "Authorization: $TOKEN"
+    )
     @GET(TASKS_ENDPOINT)
     suspend fun getTasks() : TaskContainer
 
