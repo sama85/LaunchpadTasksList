@@ -63,17 +63,21 @@
         app:layout_constraintTop_toTopOf="@id/task_id_text"
         tools:text="لم تبدأ" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/start_btn"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_max="60dp"
         android:layout_marginTop="@dimen/margin_big"
-        android:background="@drawable/custom_button"
-        android:drawableStart="@drawable/ic_alert"
+        android:backgroundTint="@color/purple_custom"
         android:text="بدء الرحلة"
         android:textColor="@color/white"
         android:textSize="@dimen/header_text_size_small"
         android:textStyle="bold"
+        app:cornerRadius="10dp"
+        app:icon="@drawable/ic_alert"
+        app:iconGravity="textStart"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/status_text"
         app:layout_constraintStart_toStartOf="@id/task_id_text"
         app:layout_constraintTop_toBottomOf="@id/delivery_time_text" />

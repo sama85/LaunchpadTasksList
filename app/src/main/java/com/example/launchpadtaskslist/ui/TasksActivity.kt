@@ -1,11 +1,12 @@
-package com.example.launchpadtaskslist
+package com.example.launchpadtaskslist.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.launchpadtaskslist.R
 
-class MainActivity : AppCompatActivity() {
+class TasksActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_tasks)
+        setContentView(R.layout.activity_main)
     }
 }
