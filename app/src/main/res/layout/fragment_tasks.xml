@@ -101,17 +101,17 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:id="@+id/status_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/horizontal_background"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:textColor="@color/black"
-        android:text="api status text"
-        android:textSize="20sp"/>
+<!--    <TextView-->
+<!--        android:id="@+id/status_text"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/horizontal_background"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:text="api status text"-->
+<!--        android:textSize="20sp"/>-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tasks_list"
@@ -121,7 +121,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:listitem="@layout/task_item_view"/>
+        tools:listitem="@layout/task_item_view"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

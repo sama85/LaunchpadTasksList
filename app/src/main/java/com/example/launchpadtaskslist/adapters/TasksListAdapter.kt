@@ -17,7 +17,8 @@ class TasksListAdapter : ListAdapter<Task, RecyclerView.ViewHolder>(diffCallback
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        TODO("Not yet implemented")
+        val item = getItem(position)
+        (holder as TaskViewHolder).bind(item)
     }
 }
 
@@ -34,10 +35,11 @@ class TaskViewHolder(val binding: TaskItemViewBinding) : RecyclerView.ViewHolder
 
     fun bind(task: Task) {
         binding.statusText.text = task.status
-        task.deliveryTime?.apply { binding.deliveryTimeText.text = task.deliveryTime }
-
+        task.deliveryTime?.apply {
+            binding.deliveryTimeText.text = task.deliveryTime
+        }
+        binding.taskIdText.text = task.id.toString()
     }
-
 
 }
 

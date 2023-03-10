@@ -1,5 +1,6 @@
 package com.example.launchpadtaskslist.viewmodels
 
+import Task
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,6 +12,10 @@ class TasksViewModel : ViewModel() {
     private val _status = MutableLiveData<String>()
     val status: LiveData<String>
         get() = _status
+
+    private val _tasksList = MutableLiveData<List<Task>>()
+    val tasksList : LiveData<List<Task>>
+        get() = _tasksList
 
     private val viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
@@ -27,6 +32,7 @@ class TasksViewModel : ViewModel() {
                 withContext(Dispatchers.IO) {
                     val tasksList = Network.tasksApiService.getTasks().result
                     _status.postValue("there are ${tasksList.size} tasks received")
+                    _tasksList.postValue(tasksList)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
