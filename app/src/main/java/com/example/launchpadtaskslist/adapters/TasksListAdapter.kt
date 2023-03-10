@@ -1,9 +1,6 @@
 package com.example.launchpadtaskslist.adapters
 
 import Task
-import android.graphics.Color
-import android.opengl.Visibility
-import android.text.Layout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,8 +20,9 @@ class TasksListAdapter : ListAdapter<Task, RecyclerView.ViewHolder>(diffCallback
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
-        (holder as TaskViewHolder).bind(item)
+        (holder as TaskViewHolder).bind(item, position)
     }
+
 }
 
 
@@ -61,12 +59,19 @@ class TaskViewHolder(val binding: TaskItemViewBinding) : RecyclerView.ViewHolder
         }
     }
 
-    fun bind(task: Task) {
+    fun bind(task: Task, position: Int) {
         binding.statusText.text = task.status
         task.deliveryTime?.apply {
             binding.deliveryTimeText.text = task.deliveryTime
         }
-        binding.taskIdText.text = task.id.toString()
+        if(position > 0) {
+            binding.taskIdText.text = task.id.toString()
+            binding.startBtn.visibility = View.GONE
+        }
+        else {
+            binding.taskIdText.text = "تأكيد استلام الطلبات"
+            binding.startBtn.visibility = View.VISIBLE
+        }
     }
 
 }
