@@ -1,12 +1,17 @@
 package com.example.launchpadtaskslist.adapters
 
 import Task
+import android.graphics.Color
+import android.opengl.Visibility
 import android.text.Layout
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.launchpadtaskslist.R
 import com.example.launchpadtaskslist.databinding.TaskItemViewBinding
 
 
@@ -29,6 +34,12 @@ class TaskViewHolder(val binding: TaskItemViewBinding) : RecyclerView.ViewHolder
         fun from(parent: ViewGroup): TaskViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = TaskItemViewBinding.inflate(inflater, parent, false)
+            binding.startBtn.setOnClickListener {
+                it.visibility = View.GONE
+                binding.statusText.text = "تم بنحاح"
+                binding.statusText.setTextColor(ContextCompat.getColor(parent.context, R.color.green_custom))
+                binding.statusText.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_done, 0, 0, 0)
+            }
             return TaskViewHolder(binding)
         }
     }
@@ -41,6 +52,10 @@ class TaskViewHolder(val binding: TaskItemViewBinding) : RecyclerView.ViewHolder
         binding.taskIdText.text = task.id.toString()
     }
 
+}
+
+interface StartButtonListener{
+    fun onClick(button : View)
 }
 
 object diffCallback : DiffUtil.ItemCallback<Task>() {

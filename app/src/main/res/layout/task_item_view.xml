@@ -23,7 +23,7 @@
         android:background="@color/purple_custom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/sequence_img"
-        app:layout_constraintHeight_min="100dp"
+        app:layout_constraintHeight_min="30dp"
         app:layout_constraintStart_toStartOf="@id/sequence_img"
         app:layout_constraintTop_toBottomOf="@id/sequence_img" />
 
@@ -66,8 +66,7 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/start_btn"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintHeight_max="60dp"
+        android:layout_height="60dp"
         android:layout_marginTop="@dimen/margin_big"
         android:backgroundTint="@color/purple_custom"
         android:text="بدء الرحلة"
