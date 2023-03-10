@@ -46,7 +46,7 @@
         android:layout_marginTop="@dimen/margin_small"
         android:drawableStart="@drawable/ic_alarm"
         android:drawablePadding="@dimen/margin_very_small"
-        android:text="الوصول 08:30 صباحا"
+        android:text="---------"
         app:layout_constraintStart_toStartOf="@id/task_id_text"
         app:layout_constraintTop_toBottomOf="@id/task_id_text" />
 

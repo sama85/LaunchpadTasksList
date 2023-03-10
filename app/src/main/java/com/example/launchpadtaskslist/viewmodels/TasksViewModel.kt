@@ -29,6 +29,7 @@ class TasksViewModel : ViewModel() {
                     _status.postValue("there are ${tasksList.size} tasks received")
                 }
             } catch (e: Exception) {
+                e.printStackTrace()
                 _status.postValue("error retrieving the tasks")
             }
         }
