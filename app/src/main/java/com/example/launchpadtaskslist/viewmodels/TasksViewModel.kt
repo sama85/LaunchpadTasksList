@@ -1,6 +1,7 @@
 package com.example.launchpadtaskslist.viewmodels
 
 import Task
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,6 +17,10 @@ class TasksViewModel : ViewModel() {
     private val _tasksList = MutableLiveData<List<Task>>()
     val tasksList : LiveData<List<Task>>
         get() = _tasksList
+
+//    private val _buttonClicked = MutableLiveData<Boolean>()
+//    val buttonClicked : LiveData<Boolean>
+//        get() = _buttonClicked
 
     private val viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
@@ -39,6 +44,10 @@ class TasksViewModel : ViewModel() {
                 _status.postValue("error retrieving the tasks")
             }
         }
+    }
+
+    fun onStartButtonClicked(){
+//        _buttonClicked.value = true
     }
 
 }

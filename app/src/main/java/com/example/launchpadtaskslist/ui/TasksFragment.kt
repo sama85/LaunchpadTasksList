@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.launchpadtaskslist.adapters.StartButtonListener
 import com.example.launchpadtaskslist.adapters.TasksListAdapter
 import com.example.launchpadtaskslist.databinding.FragmentTasksBinding
 import com.example.launchpadtaskslist.viewmodels.TasksViewModel
@@ -22,11 +23,19 @@ class TasksFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-
         val binding = FragmentTasksBinding.inflate(inflater)
+
+//        val buttonListener = object : StartButtonListener{
+//            override fun onClick(button: View) {
+//                viewModel.onStartButtonClicked()
+//            }
+//        }
+
         val adapter = TasksListAdapter()
 
         binding.tasksList?.adapter = adapter
+
+
 
 //        viewModel.status.observe(viewLifecycleOwner, Observer {
 //            //HOW IS TEXT VIEW IN BINDING NULLABLE?
