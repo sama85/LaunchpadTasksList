@@ -50,7 +50,7 @@ class TasksFragment : Fragment() {
                 Log.i("TasksFragment", (itemsList[0] is DataItem.HeaderItem).toString())
                 Log.i("TasksFragment", (itemsList[1] is DataItem.HeaderItem).toString())
                 Log.i("TasksFragment", (itemsList[2] is DataItem.HeaderItem).toString())
-                adapter.submitList(it)
+                adapter.submitList(itemsList)
             }
         })
         return binding.root
