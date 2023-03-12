@@ -11,8 +11,18 @@ import androidx.lifecycle.ViewModel
 import com.example.launchpadtaskslist.adapters.DataItem
 import com.example.launchpadtaskslist.network.Network
 import kotlinx.coroutines.*
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class TasksViewModel : ViewModel() {
+
+    private val _todayDate = MutableLiveData<String>()
+    val todayDate : LiveData<String>
+        get() = _todayDate
+
+    private val _tomorrowDate = MutableLiveData<String>()
+    val tomorrowDate : LiveData<String>
+        get() = _tomorrowDate
 
     private val _status = MutableLiveData<String>()
     val status: LiveData<String>
@@ -30,7 +40,14 @@ class TasksViewModel : ViewModel() {
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     init {
+//        initializeDates()
         getTasks()
+    }
+
+    private fun initializeDates() {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd")
+        _todayDate.value = LocalDate.now().format(formatter)
+        _tomorrowDate.value = LocalDate.now().plusDays(1).format(formatter)
     }
 
     // use network api to fetch data and initialize ui live data to be displayed

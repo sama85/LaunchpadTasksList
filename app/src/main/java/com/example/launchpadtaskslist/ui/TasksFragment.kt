@@ -16,10 +16,12 @@ import com.example.launchpadtaskslist.viewmodels.TasksViewModel
 
 class TasksFragment : Fragment() {
 
-        private val viewModel : TasksViewModel by lazy {
-            ViewModelProvider(this).get(TasksViewModel::class.java)
-        }
-        override fun onCreateView(
+    private val viewModel: TasksViewModel by lazy {
+        ViewModelProvider(this).get(TasksViewModel::class.java)
+    }
+
+    private lateinit var adapter: TasksListAdapter
+    override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,11 +35,13 @@ class TasksFragment : Fragment() {
 //            }
 //        }
 
-        val adapter = TasksListAdapter()
+//        viewModel.todayDate.observe(viewLifecycleOwner, Observer {
+//            adapter = TasksListAdapter(it, viewModel.tomorrowDate.value!!)
+//            binding.tasksList?.adapter = adapter
+//        })
 
+        adapter = TasksListAdapter()
         binding.tasksList?.adapter = adapter
-
-
 
 //        viewModel.status.observe(viewLifecycleOwner, Observer {
 //            //HOW IS TEXT VIEW IN BINDING NULLABLE?

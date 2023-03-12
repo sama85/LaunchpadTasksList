@@ -14,14 +14,19 @@ import com.example.launchpadtaskslist.databinding.HeaderItemViewBinding
 import com.example.launchpadtaskslist.databinding.TaskItemViewBinding
 import kotlin.reflect.jvm.internal.impl.serialization.deserialization.FlexibleTypeDeserializer.ThrowException
 
-enum class ViewType(val IntType : Int){
+enum class ViewType(val IntType: Int) {
     TASK(0),
     HEADER(1)
 }
-class TasksListAdapter : ListAdapter<DataItem, RecyclerView.ViewHolder>(diffCallback) {
+
+const val referenceTodayDate = "2022-11-07"
+const val referenceTomorrowDate = "2022-11-08"
+
+class TasksListAdapter() :
+    ListAdapter<DataItem, RecyclerView.ViewHolder>(diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when(viewType){
+        return when (viewType) {
             ViewType.TASK.IntType -> TaskViewHolder.from(parent)
             ViewType.HEADER.IntType -> HeaderViewHolder.from(parent)
             else -> throw java.lang.ClassCastException("unknown view type $viewType")
@@ -30,7 +35,7 @@ class TasksListAdapter : ListAdapter<DataItem, RecyclerView.ViewHolder>(diffCall
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
-        when(holder){
+        when (holder) {
             is TaskViewHolder -> {
                 val task = (item as DataItem.TaskItem).task
                 holder.bind(task, position)
@@ -43,7 +48,7 @@ class TasksListAdapter : ListAdapter<DataItem, RecyclerView.ViewHolder>(diffCall
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when(getItem(position)){
+        return when (getItem(position)) {
             is DataItem.TaskItem -> ViewType.TASK.IntType
             is DataItem.HeaderItem -> ViewType.HEADER.IntType
         }
@@ -51,18 +56,33 @@ class TasksListAdapter : ListAdapter<DataItem, RecyclerView.ViewHolder>(diffCall
 }
 
 
-class HeaderViewHolder(val binding : HeaderItemViewBinding) : RecyclerView.ViewHolder(binding.root){
-    companion object{
-        fun from(parent : ViewGroup) : HeaderViewHolder{
+class HeaderViewHolder(val binding: HeaderItemViewBinding) : RecyclerView.ViewHolder(binding.root) {
+    companion object {
+        fun from(parent: ViewGroup): HeaderViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = HeaderItemViewBinding.inflate(inflater, parent, false)
             return HeaderViewHolder(binding)
         }
     }
 
-    fun bind(header: Header){
-        binding.dateText.text = header.date
-        binding.tasksNumberText.text = header.numTasks.toString()
+    fun bind(header: Header) {
+
+        when (header.date) {
+            referenceTodayDate -> {
+                binding.dateText.text = "مهام اليوم"
+                binding.tasksNumberText.text = "(" + header.numTasks.toString() + " " + "مهام)"
+            }
+            referenceTomorrowDate -> {
+                binding.dateText.text = "طلبات غدا"
+                binding.tasksNumberText.text = "(" + header.numTasks.toString() + " " + "طلبات)"
+            }
+            else -> {
+                binding.dateText.text = header.date
+                binding.tasksNumberText.text = "(" + header.numTasks.toString() + " " + "طلبات)"
+            }
+        }
+
+
     }
 }
 
