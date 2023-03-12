@@ -89,14 +89,11 @@ class TasksViewModel : ViewModel() {
                 numOfTasks = 1
                 currentDate = tasksList[i + 1].taskDate
 
-            } else numOfTasks++
-
+            } else {
+                numOfTasks++
+            }
         }
         return itemsList
-    }
-
-    fun onStartButtonClicked() {
-//        _buttonClicked.value = true
     }
 
 }

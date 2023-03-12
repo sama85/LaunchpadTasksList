@@ -19,10 +19,10 @@ enum class ViewType(val IntType: Int) {
     HEADER(1)
 }
 
-const val referenceTodayDate = "2022-11-07"
-const val referenceTomorrowDate = "2022-11-08"
+//const val referenceTodayDate = "2022-11-07"
+//const val referenceTomorrowDate = "2022-11-08"
 
-class TasksListAdapter() :
+class TasksListAdapter(val todayDate: String, val tomorrowDate: String) :
     ListAdapter<DataItem, RecyclerView.ViewHolder>(diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -38,11 +38,11 @@ class TasksListAdapter() :
         when (holder) {
             is TaskViewHolder -> {
                 val task = (item as DataItem.TaskItem).task
-                holder.bind(task, position)
+                holder.bind(task, todayDate)
             }
             is HeaderViewHolder -> {
                 val header = (item as DataItem.HeaderItem).header
-                holder.bind(header)
+                holder.bind(header, todayDate, tomorrowDate)
             }
         }
     }
@@ -65,24 +65,22 @@ class HeaderViewHolder(val binding: HeaderItemViewBinding) : RecyclerView.ViewHo
         }
     }
 
-    fun bind(header: Header) {
+    fun bind(header: Header, todayDate: String, tomorrowDate: String) {
 
         when (header.date) {
-            referenceTodayDate -> {
+            todayDate -> {
                 binding.dateText.text = "مهام اليوم"
-                binding.tasksNumberText.text = "(" + header.numTasks.toString() + " " + "مهام)"
+                binding.tasksNumberText.text = "(${header.numTasks} مهام)"
             }
-            referenceTomorrowDate -> {
+            tomorrowDate -> {
                 binding.dateText.text = "طلبات غدا"
-                binding.tasksNumberText.text = "(" + header.numTasks.toString() + " " + "طلبات)"
+                binding.tasksNumberText.text = "(${header.numTasks} طلبات)"
             }
             else -> {
                 binding.dateText.text = header.date
-                binding.tasksNumberText.text = "(" + header.numTasks.toString() + " " + "طلبات)"
+                binding.tasksNumberText.text = "(${header.numTasks} طلبات)"
             }
         }
-
-
     }
 }
 
@@ -119,12 +117,12 @@ class TaskViewHolder(val binding: TaskItemViewBinding) : RecyclerView.ViewHolder
         }
     }
 
-    fun bind(task: Task, position: Int) {
+    fun bind(task: Task, todayDate: String) {
         binding.statusText.text = task.status
         task.deliveryTime?.apply {
             binding.deliveryTimeText.text = "الوصول" + task.deliveryTime
         }
-        if (position > 0) {
+        if (task.taskDate != todayDate) {
             binding.taskIdText.text = "وصل الطلب رقم #" + task.id.toString()
             binding.taskIdText.setTextColor(
                 ContextCompat.getColor(
@@ -139,10 +137,6 @@ class TaskViewHolder(val binding: TaskItemViewBinding) : RecyclerView.ViewHolder
         }
     }
 
-}
-
-interface StartButtonListener {
-    fun onClick(binding: TaskItemViewBinding)
 }
 
 object diffCallback : DiffUtil.ItemCallback<DataItem>() {

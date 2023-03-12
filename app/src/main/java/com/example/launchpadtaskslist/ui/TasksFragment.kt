@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.launchpadtaskslist.adapters.DataItem
-import com.example.launchpadtaskslist.adapters.StartButtonListener
 import com.example.launchpadtaskslist.adapters.TasksListAdapter
 import com.example.launchpadtaskslist.databinding.FragmentTasksBinding
 import com.example.launchpadtaskslist.viewmodels.TasksViewModel
@@ -29,18 +28,12 @@ class TasksFragment : Fragment() {
 
         val binding = FragmentTasksBinding.inflate(inflater)
 
-//        val buttonListener = object : StartButtonListener{
-//            override fun onClick(button: View) {
-//                viewModel.onStartButtonClicked()
-//            }
-//        }
-
 //        viewModel.todayDate.observe(viewLifecycleOwner, Observer {
 //            adapter = TasksListAdapter(it, viewModel.tomorrowDate.value!!)
 //            binding.tasksList?.adapter = adapter
 //        })
 
-        adapter = TasksListAdapter()
+        adapter = TasksListAdapter("2022-11-07", "2022-11-08")
         binding.tasksList?.adapter = adapter
 
 //        viewModel.status.observe(viewLifecycleOwner, Observer {
