@@ -1,12 +1,14 @@
 package com.example.launchpadtaskslist.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.launchpadtaskslist.adapters.DataItem
 import com.example.launchpadtaskslist.adapters.StartButtonListener
 import com.example.launchpadtaskslist.adapters.TasksListAdapter
 import com.example.launchpadtaskslist.databinding.FragmentTasksBinding
@@ -44,6 +46,10 @@ class TasksFragment : Fragment() {
 
         viewModel.tasksList.observe(viewLifecycleOwner, Observer {
             it?.apply {
+                val itemsList = viewModel.addHeaders(it)
+                Log.i("TasksFragment", (itemsList[0] is DataItem.HeaderItem).toString())
+                Log.i("TasksFragment", (itemsList[1] is DataItem.HeaderItem).toString())
+                Log.i("TasksFragment", (itemsList[2] is DataItem.HeaderItem).toString())
                 adapter.submitList(it)
             }
         })

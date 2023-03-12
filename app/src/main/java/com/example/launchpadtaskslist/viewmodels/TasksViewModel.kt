@@ -1,10 +1,14 @@
 package com.example.launchpadtaskslist.viewmodels
 
+import Header
 import Task
+import android.provider.ContactsContract.Data
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.launchpadtaskslist.adapters.DataItem
 import com.example.launchpadtaskslist.network.Network
 import kotlinx.coroutines.*
 
@@ -15,7 +19,7 @@ class TasksViewModel : ViewModel() {
         get() = _status
 
     private val _tasksList = MutableLiveData<List<Task>>()
-    val tasksList : LiveData<List<Task>>
+    val tasksList: LiveData<List<Task>>
         get() = _tasksList
 
 //    private val _buttonClicked = MutableLiveData<Boolean>()
@@ -46,7 +50,35 @@ class TasksViewModel : ViewModel() {
         }
     }
 
-    fun onStartButtonClicked(){
+    fun addHeaders(tasksList: List<Task>): List<DataItem> {
+        var headerId = 0
+        var insertPos = 0
+        var currentDate = tasksList[0].taskDate
+        var numOfTasks = 1
+        val taskItemList = tasksList.map {
+            DataItem.TaskItem(it)
+        }
+        val itemsList: MutableList<DataItem> = taskItemList.toMutableList()
+
+//        Log.i("TasksViewModel", (itemsList[0] as DataItem.TaskItem).task.taskDate)
+
+        for (i in 0 until tasksList.size) {
+            if (i < tasksList.size - 1 &&
+                tasksList[i].taskDate != tasksList[i + 1].taskDate
+            ) {
+                val header = Header(headerId++, currentDate, numOfTasks)
+                itemsList.add(insertPos, DataItem.HeaderItem(header))
+                insertPos = i + 1 + headerId
+                numOfTasks = 1
+                currentDate = tasksList[i + 1].taskDate
+
+            } else numOfTasks++
+
+        }
+        return itemsList
+    }
+
+    fun onStartButtonClicked() {
 //        _buttonClicked.value = true
     }
 

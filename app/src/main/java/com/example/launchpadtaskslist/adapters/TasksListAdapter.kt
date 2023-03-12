@@ -1,5 +1,6 @@
 package com.example.launchpadtaskslist.adapters
 
+import Header
 import Task
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,9 @@ import com.example.launchpadtaskslist.databinding.TaskItemViewBinding
 
 class TasksListAdapter : ListAdapter<Task, RecyclerView.ViewHolder>(diffCallback) {
 
+    override fun getCurrentList(): MutableList<Task> {
+        return super.getCurrentList()
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return TaskViewHolder.from(parent)
     }
@@ -62,10 +66,11 @@ class TaskViewHolder(val binding: TaskItemViewBinding) : RecyclerView.ViewHolder
     fun bind(task: Task, position: Int) {
         binding.statusText.text = task.status
         task.deliveryTime?.apply {
-            binding.deliveryTimeText.text = task.deliveryTime
+            binding.deliveryTimeText.text = "الوصول" + task.deliveryTime
         }
         if(position > 0) {
-            binding.taskIdText.text = task.id.toString()
+            binding.taskIdText.text = "وصل الطلب رقم #" + task.id.toString()
+            binding.taskIdText.setTextColor(ContextCompat.getColor(binding.root.context, R.color.grey_custom))
             binding.startBtn.visibility = View.GONE
         }
         else {
@@ -87,6 +92,20 @@ object diffCallback : DiffUtil.ItemCallback<Task>() {
 
     override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean {
         return oldItem == newItem
+    }
+
+}
+
+sealed class DataItem(){
+
+    abstract val id : Int
+
+    class TaskItem(val task : Task) : DataItem(){
+        override val id = task.id
+    }
+
+    class HeaderItem(val header : Header) : DataItem(){
+        override val id = header.id
     }
 
 }

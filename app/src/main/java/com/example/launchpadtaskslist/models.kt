@@ -16,3 +16,10 @@ data class Task(
     @Json(name = "estimated_delivery_time")
     val deliveryTime : String?
 )
+
+data class Header(
+    val id : Int,
+    val date : String,
+    val numTasks : Int
+)
+
