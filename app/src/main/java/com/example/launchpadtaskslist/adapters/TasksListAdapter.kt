@@ -19,6 +19,10 @@ enum class ViewType(val IntType: Int) {
     HEADER(1)
 }
 
+val statusTranslation = mapOf("new" to "لم تبدأ", "confirmed" to "لم تبدأ", "ready_for_preparation" to "لم تبدأ",
+"under_preparation" to "لم تبدأ","ready_for_delivery" to "جاهز للتوصيل", "on_the_way" to "جاري التوصيل",
+"delivered" to "تم التوصيل", "cancelled" to "تم الالغاء")
+
 //const val referenceTodayDate = "2022-11-07"
 //const val referenceTomorrowDate = "2022-11-08"
 
@@ -117,7 +121,7 @@ class TaskViewHolder(val binding: TaskItemViewBinding) : RecyclerView.ViewHolder
     }
 
     fun bind(task: Task, todayDate: String) {
-        binding.statusText.text = task.status
+        binding.statusText.text = statusTranslation[task.status]
         task.deliveryTime?.apply {
             binding.deliveryTimeText.text = "الوصول" + task.deliveryTime
         }

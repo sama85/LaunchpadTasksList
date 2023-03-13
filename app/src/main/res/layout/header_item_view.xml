@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layoutDirection="rtl">
+    android:layoutDirection="rtl"
+    android:layout_marginTop="10dp">
 
     <TextView
         android:id="@+id/date_text"
