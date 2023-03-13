@@ -24,7 +24,6 @@ enum class ViewType(val IntType: Int) {
 
 class TasksListAdapter(val todayDate: String, val tomorrowDate: String) :
     ListAdapter<DataItem, RecyclerView.ViewHolder>(diffCallback) {
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             ViewType.TASK.IntType -> TaskViewHolder.from(parent)
@@ -77,7 +76,7 @@ class HeaderViewHolder(val binding: HeaderItemViewBinding) : RecyclerView.ViewHo
                 binding.tasksNumberText.text = "(${header.numTasks} طلبات)"
             }
             else -> {
-                binding.dateText.text = header.date
+                binding.dateText.text = "طلبات " + header.date
                 binding.tasksNumberText.text = "(${header.numTasks} طلبات)"
             }
         }
@@ -133,7 +132,8 @@ class TaskViewHolder(val binding: TaskItemViewBinding) : RecyclerView.ViewHolder
             binding.startBtn.visibility = View.GONE
         } else {
             binding.taskIdText.text = "تأكيد استلام الطلبات"
-            binding.startBtn.visibility = View.VISIBLE
+            if(task.sequenceNum == 0) binding.startBtn.visibility = View.VISIBLE
+            else  binding.startBtn.visibility = View.GONE
         }
     }
 

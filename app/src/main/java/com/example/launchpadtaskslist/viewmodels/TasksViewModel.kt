@@ -124,12 +124,15 @@ class TasksViewModel : ViewModel() {
                     i = j - 1
                     break
                 }
+                if(j == tasksList.size - 1){
+                    val header = Header(headerId++, currentDate, numOfTasks)
+                    itemsList.add(i + headerId - 1, DataItem.HeaderItem(header))
+                }
             }
             ++i
         }
-        //insert last header
-        val lastHeader = Header(headerId++, currentDate, numOfTasks)
-        itemsList.add(i + headerId, DataItem.HeaderItem(lastHeader))
+        Log.i("tasks vm", "task list size : ${tasksList.size}")
+        Log.i("tasks vm", "item list size : ${itemsList.size}")
 
         return itemsList
     }

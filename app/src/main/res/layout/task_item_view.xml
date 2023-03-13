@@ -23,7 +23,7 @@
         android:background="@color/purple_custom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/sequence_img"
-        app:layout_constraintHeight_min="40dp"
+        app:layout_constraintHeight_min="50dp"
         app:layout_constraintStart_toStartOf="@id/sequence_img"
         app:layout_constraintTop_toBottomOf="@id/sequence_img" />
 

@@ -33,7 +33,7 @@ class TasksFragment : Fragment() {
 //            binding.tasksList?.adapter = adapter
 //        })
 
-        adapter = TasksListAdapter("2022-11-07", "2022-11-08")
+        adapter = TasksListAdapter("2022-11-08", "2022-11-09")
         binding.tasksList?.adapter = adapter
 
 //        viewModel.status.observe(viewLifecycleOwner, Observer {
