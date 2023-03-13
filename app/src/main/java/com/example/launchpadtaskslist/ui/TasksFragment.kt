@@ -43,7 +43,7 @@ class TasksFragment : Fragment() {
 
         viewModel.tasksList.observe(viewLifecycleOwner, Observer {
             it?.apply {
-                val itemsList = viewModel.addHeaders(it)
+                val itemsList = viewModel.addHeadersAndTasksSequence(it)
                 Log.i("TasksFragment", (itemsList[0] is DataItem.HeaderItem).toString())
                 Log.i("TasksFragment", (itemsList[1] is DataItem.HeaderItem).toString())
                 Log.i("TasksFragment", (itemsList[2] is DataItem.HeaderItem).toString())

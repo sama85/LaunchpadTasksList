@@ -17,11 +17,11 @@ import java.time.format.DateTimeFormatter
 class TasksViewModel : ViewModel() {
 
     private val _todayDate = MutableLiveData<String>()
-    val todayDate : LiveData<String>
+    val todayDate: LiveData<String>
         get() = _todayDate
 
     private val _tomorrowDate = MutableLiveData<String>()
-    val tomorrowDate : LiveData<String>
+    val tomorrowDate: LiveData<String>
         get() = _tomorrowDate
 
     private val _status = MutableLiveData<String>()
@@ -67,6 +67,7 @@ class TasksViewModel : ViewModel() {
         }
     }
 
+
     fun addHeaders(tasksList: List<Task>): List<DataItem> {
         var headerId = 0
         var insertPos = 0
@@ -93,6 +94,43 @@ class TasksViewModel : ViewModel() {
                 numOfTasks++
             }
         }
+        return itemsList
+    }
+
+    // taskslist:   d1 d1 d2 d2 d3 d3 d3
+    //              h1 d1 d1 d2
+    fun addHeadersAndTasksSequence(tasksList: List<Task>): List<DataItem> {
+
+        if (tasksList.isEmpty()) return emptyList<DataItem>()
+
+        var headerId = 0
+        lateinit var currentDate: String
+        var numOfTasks = 0
+        val itemsList = mutableListOf<DataItem>()
+
+        var i = 0
+        while (i < tasksList.size) {
+            currentDate = tasksList[i].taskDate
+            numOfTasks = 0
+            for (j in i until tasksList.size) {
+                if (tasksList[j].taskDate == currentDate) {
+                    val taskItem = DataItem.TaskItem(tasksList[j])
+                    taskItem.task.sequenceNum = numOfTasks++
+                    itemsList.add(taskItem)
+                } else {
+                    //insert header and modify current date
+                    val header = Header(headerId++, currentDate, numOfTasks)
+                    itemsList.add(i + headerId - 1, DataItem.HeaderItem(header))
+                    i = j - 1
+                    break
+                }
+            }
+            ++i
+        }
+        //insert last header
+        val lastHeader = Header(headerId++, currentDate, numOfTasks)
+        itemsList.add(i + headerId, DataItem.HeaderItem(lastHeader))
+
         return itemsList
     }
 

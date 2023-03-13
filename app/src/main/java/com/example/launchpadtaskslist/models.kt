@@ -16,7 +16,7 @@ data class Task(
     @Json(name = "estimated_delivery_time")
     val deliveryTime : String?,
     @Json(name = "sequence")
-    val sequenceNum : Int?
+    var sequenceNum : Int?
 )
 
 data class Header(
