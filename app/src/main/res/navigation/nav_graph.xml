@@ -9,5 +9,22 @@
         android:id="@+id/tasksFragment"
         android:name="com.example.launchpadtaskslist.ui.TasksFragment"
         android:label="fragment_tasks"
-        tools:layout="@layout/fragment_tasks"/>
+        tools:layout="@layout/fragment_tasks">
+        <action
+            android:id="@+id/action_tasksFragment_to_accountFragment"
+            app:destination="@id/accountFragment" />
+        <action
+            android:id="@+id/action_tasksFragment_to_walletFragment"
+            app:destination="@id/walletFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/accountFragment"
+        android:name="com.example.launchpadtaskslist.ui.AccountFragment"
+        android:label="fragment_account"
+        tools:layout="@layout/fragment_account" />
+    <fragment
+        android:id="@+id/walletFragment"
+        android:name="com.example.launchpadtaskslist.ui.WalletFragment"
+        android:label="fragment_wallet"
+        tools:layout="@layout/fragment_wallet" />
 </navigation>
