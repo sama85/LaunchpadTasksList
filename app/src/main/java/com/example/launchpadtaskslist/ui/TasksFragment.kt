@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.launchpadtaskslist.adapters.DataItem
+import com.example.launchpadtaskslist.adapters.StartButtonListener
 import com.example.launchpadtaskslist.adapters.TasksListAdapter
 import com.example.launchpadtaskslist.databinding.FragmentTasksBinding
 import com.example.launchpadtaskslist.viewmodels.TasksViewModel
@@ -33,9 +34,27 @@ class TasksFragment : Fragment() {
 //            binding.tasksList?.adapter = adapter
 //        })
 
-        adapter = TasksListAdapter("2022-11-08", "2022-11-09")
+        val startButtonListener = object : StartButtonListener {
+            override fun onClick(position: Int) {
+                viewModel.handleClick(position)
+            }
+        }
+        adapter = TasksListAdapter(
+            startButtonListener,
+            viewModel.referenceTodayDate,
+            viewModel.referenceTomorrowDate
+        )
         binding.tasksList?.adapter = adapter
 
+        viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
+
+            if (!binding.tasksList?.isComputingLayout!!) adapter.notifyItemChanged(it)
+            if (it < viewModel.itemsList.size - 1) {
+                if (!binding.tasksList?.isComputingLayout)
+                    adapter.notifyItemChanged(it + 1)
+            }
+
+        })
 //        viewModel.status.observe(viewLifecycleOwner, Observer {
 //            //HOW IS TEXT VIEW IN BINDING NULLABLE?
 //            binding.statusText?.text = it

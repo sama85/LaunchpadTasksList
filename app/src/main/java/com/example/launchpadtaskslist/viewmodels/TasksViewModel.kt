@@ -2,9 +2,7 @@ package com.example.launchpadtaskslist.viewmodels
 
 import Header
 import Task
-import android.provider.ContactsContract.Data
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,6 +13,9 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class TasksViewModel : ViewModel() {
+
+    val referenceTodayDate = "2022-11-08"
+    val referenceTomorrowDate = "2022-11-09"
 
     private val _todayDate = MutableLiveData<String>()
     val todayDate: LiveData<String>
@@ -32,9 +33,11 @@ class TasksViewModel : ViewModel() {
     val tasksList: LiveData<List<Task>>
         get() = _tasksList
 
-//    private val _buttonClicked = MutableLiveData<Boolean>()
-//    val buttonClicked : LiveData<Boolean>
-//        get() = _buttonClicked
+    val itemsList = mutableListOf<DataItem>()
+
+    private val _itemClicked = MutableLiveData<Int>()
+    val itemClicked : LiveData<Int>
+        get() = _itemClicked
 
     private val viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
@@ -106,7 +109,6 @@ class TasksViewModel : ViewModel() {
         var headerId = 0
         lateinit var currentDate: String
         var numOfTasks = 0
-        val itemsList = mutableListOf<DataItem>()
 
         var i = 0
         while (i < tasksList.size) {
@@ -116,7 +118,13 @@ class TasksViewModel : ViewModel() {
                 if (tasksList[j].taskDate == currentDate) {
                     val taskItem = DataItem.TaskItem(tasksList[j])
                     taskItem.task.sequenceNum = numOfTasks++
+
+                    //mark first item in today's tasks as active
+                    if(tasksList[j].taskDate == referenceTodayDate && tasksList[j].sequenceNum == 0)
+                        taskItem.isActive = true
+
                     itemsList.add(taskItem)
+
                 } else {
                     //insert header and modify current date
                     val header = Header(headerId++, currentDate, numOfTasks)
@@ -135,6 +143,21 @@ class TasksViewModel : ViewModel() {
         Log.i("tasks vm", "item list size : ${itemsList.size}")
 
         return itemsList
+    }
+
+    fun handleClick(position : Int){
+        val currentItem = itemsList[position]
+        if(currentItem is DataItem.TaskItem){
+            currentItem.isActive = false
+            currentItem.task.status = "done"
+        }
+        if(position < itemsList.size - 1) {
+            val nextItem = itemsList[position + 1]
+            if(nextItem is DataItem.TaskItem){
+                nextItem.isActive = true
+            }
+        }
+        _itemClicked.value = position
     }
 
 }

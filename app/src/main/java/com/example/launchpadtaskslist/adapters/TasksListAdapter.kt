@@ -19,14 +19,24 @@ enum class ViewType(val IntType: Int) {
     HEADER(1)
 }
 
-val statusTranslation = mapOf("new" to "لم تبدأ", "confirmed" to "لم تبدأ", "ready_for_preparation" to "لم تبدأ",
-"under_preparation" to "لم تبدأ","ready_for_delivery" to "جاهز للتوصيل", "on_the_way" to "جاري التوصيل",
-"delivered" to "تم التوصيل", "cancelled" to "تم الالغاء")
+val statusTranslation = mapOf(
+    "new" to "لم تبدأ",
+    "confirmed" to "لم تبدأ",
+    "ready_for_preparation" to "لم تبدأ",
+    "under_preparation" to "لم تبدأ",
+    "ready_for_delivery" to "جاهز للتوصيل",
+    "on_the_way" to "جاري التوصيل",
+    "delivered" to "تم التوصيل",
+    "cancelled" to "تم الالغاء",
+    "done" to "تم بنجاح"
+)
 
-//const val referenceTodayDate = "2022-11-07"
-//const val referenceTomorrowDate = "2022-11-08"
 
-class TasksListAdapter(val todayDate: String, val tomorrowDate: String) :
+class TasksListAdapter(
+    val listener: StartButtonListener,
+    val todayDate: String,
+    val tomorrowDate: String
+) :
     ListAdapter<DataItem, RecyclerView.ViewHolder>(diffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -38,10 +48,10 @@ class TasksListAdapter(val todayDate: String, val tomorrowDate: String) :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
+        getItem(position + 1)
         when (holder) {
             is TaskViewHolder -> {
-                val task = (item as DataItem.TaskItem).task
-                holder.bind(task, todayDate)
+                holder.bind(item as DataItem.TaskItem, todayDate, position, listener)
             }
             is HeaderViewHolder -> {
                 val header = (item as DataItem.HeaderItem).header
@@ -93,35 +103,32 @@ class TaskViewHolder(val binding: TaskItemViewBinding) : RecyclerView.ViewHolder
         fun from(parent: ViewGroup): TaskViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = TaskItemViewBinding.inflate(inflater, parent, false)
-            setButtonListener(binding, parent)
             return TaskViewHolder(binding)
-        }
-
-        private fun setButtonListener(
-            binding: TaskItemViewBinding,
-            parent: ViewGroup
-        ) {
-            binding.startBtn.setOnClickListener {
-                it.visibility = View.GONE
-                binding.statusText.text = "تم بنجاح"
-                binding.statusText.setTextColor(
-                    ContextCompat.getColor(
-                        parent.context,
-                        R.color.green_custom
-                    )
-                )
-                binding.statusText.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                    R.drawable.ic_done,
-                    0,
-                    0,
-                    0
-                )
-            }
         }
     }
 
-    fun bind(task: Task, todayDate: String) {
+    fun bind(
+        taskItem: DataItem.TaskItem,
+        todayDate: String,
+        position: Int,
+        listener: StartButtonListener
+    ) {
+        val task = taskItem.task
         binding.statusText.text = statusTranslation[task.status]
+        if (task.status == "done") {
+            binding.statusText.setTextColor(
+                ContextCompat.getColor(
+                    binding.root.context,
+                    R.color.green_custom
+                )
+            )
+            binding.statusText.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                R.drawable.ic_done,
+                0,
+                0,
+                0
+            )
+        }
         task.deliveryTime?.apply {
             binding.deliveryTimeText.text = "الوصول" + task.deliveryTime
         }
@@ -133,14 +140,19 @@ class TaskViewHolder(val binding: TaskItemViewBinding) : RecyclerView.ViewHolder
                     R.color.grey_custom
                 )
             )
-            binding.startBtn.visibility = View.GONE
-        } else {
+        } else
             binding.taskIdText.text = "تأكيد استلام الطلبات"
-            if(task.sequenceNum == 0) binding.startBtn.visibility = View.VISIBLE
-            else  binding.startBtn.visibility = View.GONE
+
+        // set button visibilty according to isActive property
+        when (taskItem.isActive) {
+            true -> binding.startBtn.visibility = View.VISIBLE
+            else -> binding.startBtn.visibility = View.GONE
+        }
+        //vm handles clicked items and modify their data, then fragment notify adapter of items changed to rebind
+        binding.startBtn.setOnClickListener {
+            listener.onClick(position)
         }
     }
-
 }
 
 object diffCallback : DiffUtil.ItemCallback<DataItem>() {
@@ -173,10 +185,16 @@ sealed class DataItem() {
 
     class TaskItem(val task: Task) : DataItem() {
         override val id = task.id
+        var isActive: Boolean = false
     }
 
     class HeaderItem(val header: Header) : DataItem() {
         override val id = header.id
     }
 
+}
+
+interface StartButtonListener {
+    //position of clicked item to be passed to vm through fragment implementing this listener
+    fun onClick(position: Int)
 }

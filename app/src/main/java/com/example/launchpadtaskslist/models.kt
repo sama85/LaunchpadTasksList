@@ -10,7 +10,7 @@ data class TaskContainer(
 data class Task(
     val id : Int,
     @Json(name = "current_status")
-    val status : String,
+    var status : String,
     @Json(name = "task_date")
     val taskDate : String,
     @Json(name = "estimated_delivery_time")
