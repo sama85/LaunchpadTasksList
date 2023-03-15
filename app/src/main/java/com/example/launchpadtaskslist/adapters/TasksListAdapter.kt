@@ -129,9 +129,11 @@ class TaskViewHolder(val binding: TaskItemViewBinding) : RecyclerView.ViewHolder
                 0
             )
         }
-        task.deliveryTime?.apply {
+
+        if(task.deliveryTime != null)
             binding.deliveryTimeText.text = "الوصول" + task.deliveryTime
-        }
+        else binding.deliveryTimeText.text = "------"
+
         if (task.taskDate != todayDate) {
             binding.taskIdText.text = "وصل الطلب رقم #" + task.id.toString()
             binding.taskIdText.setTextColor(

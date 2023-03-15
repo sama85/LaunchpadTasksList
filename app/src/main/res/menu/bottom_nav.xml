@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="المحفظة"
+        android:id="@+id/wallet_item"
+        android:icon="@drawable/ic_empty_wallet"/>
+    <item android:title="مهامي"
+        android:id="@+id/tasks_item"
+        android:icon="@drawable/ic_task_square"/>
+
+    <item android:title="حسابي"
+        android:id="@+id/account_item"
+        android:icon="@drawable/ic_user"/>
+</menu>

@@ -53,7 +53,6 @@ class TasksFragment : Fragment() {
                 if (!binding.tasksList?.isComputingLayout)
                     adapter.notifyItemChanged(it + 1)
             }
-
         })
 //        viewModel.status.observe(viewLifecycleOwner, Observer {
 //            //HOW IS TEXT VIEW IN BINDING NULLABLE?
