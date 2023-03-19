@@ -5,9 +5,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
+import android.widget.AbsListView.OnScrollListener
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.example.launchpadtaskslist.R
 import com.example.launchpadtaskslist.adapters.DataItem
 import com.example.launchpadtaskslist.adapters.StartButtonListener
@@ -15,6 +19,7 @@ import com.example.launchpadtaskslist.adapters.TasksListAdapter
 import com.example.launchpadtaskslist.databinding.FragmentTasksBinding
 import com.example.launchpadtaskslist.viewmodels.ApiStatus
 import com.example.launchpadtaskslist.viewmodels.TasksViewModel
+import com.google.android.material.behavior.HideBottomViewOnScrollBehavior.OnScrollStateChangedListener
 
 class TasksFragment : Fragment() {
 
@@ -50,6 +55,15 @@ class TasksFragment : Fragment() {
             viewModel.referenceTomorrowDate
         )
         binding.tasksList?.adapter = adapter
+
+        binding.tasksList?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if(!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE){
+                    Toast.makeText(context, "end of list reached", Toast.LENGTH_LONG).show()
+                }
+            }
+        })
 
         viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
 
