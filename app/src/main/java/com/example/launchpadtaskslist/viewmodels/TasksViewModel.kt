@@ -12,7 +12,7 @@ import kotlinx.coroutines.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-enum class ApiStatus {LOADING, ERROR, DONE}
+enum class ApiStatus { LOADING, ERROR, DONE }
 class TasksViewModel : ViewModel() {
 
     val referenceTodayDate = "2022-11-08"
@@ -36,8 +36,8 @@ class TasksViewModel : ViewModel() {
 
     val itemsList = mutableListOf<DataItem>()
 
-    private val _itemClicked = MutableLiveData<Pair<Int,Int?>>()
-    val itemClicked : LiveData<Pair<Int,Int?>>
+    private val _itemClicked = MutableLiveData<Pair<Int, Int?>>()
+    val itemClicked: LiveData<Pair<Int, Int?>>
         get() = _itemClicked
 
     private val viewModelJob = Job()
@@ -62,8 +62,11 @@ class TasksViewModel : ViewModel() {
                 withContext(Dispatchers.IO) {
                     _status.postValue(ApiStatus.LOADING)
                     val tasksList = Network.tasksApiService.getTasks().result
-                    _status.postValue(ApiStatus.DONE)
-                    _tasksList.postValue(tasksList)
+                    if (tasksList.isEmpty()) _status.postValue(ApiStatus.ERROR)
+                    else {
+                        _status.postValue(ApiStatus.DONE)
+                        _tasksList.postValue(tasksList)
+                    }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -123,7 +126,7 @@ class TasksViewModel : ViewModel() {
 
                     //mark first item in today's tasks as active
                     /** set to todayDate for using real date / reference today date for mock testing */
-                    if(tasksList[j].taskDate == referenceTodayDate && tasksList[j].sequenceNum == 0)
+                    if (tasksList[j].taskDate == referenceTodayDate && tasksList[j].sequenceNum == 0)
                         taskItem.isActive = true
 
                     itemsList.add(taskItem)
@@ -135,7 +138,7 @@ class TasksViewModel : ViewModel() {
                     i = j - 1
                     break
                 }
-                if(j == tasksList.size - 1){
+                if (j == tasksList.size - 1) {
                     val header = Header(headerId++, currentDate, numOfTasks)
                     itemsList.add(i + headerId - 1, DataItem.HeaderItem(header))
                 }
@@ -148,16 +151,16 @@ class TasksViewModel : ViewModel() {
         return itemsList
     }
 
-    fun handleClick(position : Int){
+    fun handleClick(position: Int) {
         val currentItem = itemsList[position]
-        if(currentItem is DataItem.TaskItem){
+        if (currentItem is DataItem.TaskItem) {
             currentItem.isActive = false
             currentItem.task.status = "done"
             _itemClicked.value = Pair(position, null)
         }
-        if(position < itemsList.size - 1) {
+        if (position < itemsList.size - 1) {
             val nextItem = itemsList[position + 1]
-            if(nextItem is DataItem.TaskItem){
+            if (nextItem is DataItem.TaskItem) {
                 nextItem.isActive = true
                 _itemClicked.value = _itemClicked.value?.copy(second = position + 1)
             }
