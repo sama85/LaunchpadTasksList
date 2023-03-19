@@ -36,20 +36,20 @@ class TasksFragment : Fragment() {
                 viewModel.handleClick(position)
             }
         }
+        /**     FOR SIMULATING WITH REAL TODAY DATE       */
+//        viewModel.todayDate.observe(viewLifecycleOwner, Observer {
+//            adapter = TasksListAdapter(startButtonListener, it,
+//                        viewModel.tomorrowDate.value!!)
+//            binding.tasksList?.adapter = adapter
+//           // Log.i("Tasks Fragment", "today date $it, tomorrow date: ${viewModel.tomorrowDate.value!!}")
+//        })
 
-        viewModel.todayDate.observe(viewLifecycleOwner, Observer {
-            adapter = TasksListAdapter(startButtonListener, it,
-                        viewModel.tomorrowDate.value!!)
-            binding.tasksList?.adapter = adapter
-           // Log.i("Tasks Fragment", "today date $it, tomorrow date: ${viewModel.tomorrowDate.value!!}")
-        })
-
-/**     FOR SIMULATING WITH MOCK START DATE       */
-//        adapter = TasksListAdapter(
-//            startButtonListener,
-//            viewModel.referenceTodayDate,
-//            viewModel.referenceTomorrowDate
-//        )
+        adapter = TasksListAdapter(
+            startButtonListener,
+            viewModel.referenceTodayDate,
+            viewModel.referenceTomorrowDate
+        )
+        binding.tasksList?.adapter = adapter
 
         viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
 

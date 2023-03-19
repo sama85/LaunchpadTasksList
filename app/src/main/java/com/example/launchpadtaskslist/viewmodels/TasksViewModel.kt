@@ -122,7 +122,8 @@ class TasksViewModel : ViewModel() {
                     taskItem.task.sequenceNum = numOfTasks++
 
                     //mark first item in today's tasks as active
-                    if(tasksList[j].taskDate == _todayDate.value && tasksList[j].sequenceNum == 0)
+                    /** set to todayDate for using real date / reference today date for mock testing */
+                    if(tasksList[j].taskDate == referenceTodayDate && tasksList[j].sequenceNum == 0)
                         taskItem.isActive = true
 
                     itemsList.add(taskItem)
