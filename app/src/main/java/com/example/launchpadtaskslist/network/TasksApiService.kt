@@ -21,7 +21,12 @@ interface TasksApiService {
         "Authorization: $TOKEN",
         "Accept-Language: ar"
     )
-    @GET(TASKS_ENDPOINT)
+    /** relative_date__lte = 0 -> retrieve all old tasks up to todat
+     * relative date of old dates -> -ve (< 0)
+     * relative date of today -> 0
+     * relative date of future dates -> +ve (> 0)
+     */
+    @GET(TASKS_ENDPOINT + "?relative_date__lte=0")
     suspend fun getTasks(): TaskContainer
 
 }
