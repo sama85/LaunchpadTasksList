@@ -48,10 +48,10 @@ class TasksFragment : Fragment() {
 
         viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
 
-            if (!binding.tasksList?.isComputingLayout!!) adapter.notifyItemChanged(it)
-            if (it < viewModel.itemsList.size - 1) {
+            if (!binding.tasksList?.isComputingLayout!!) adapter.notifyItemChanged(it.first)
+            it.second?.let {
                 if (!binding.tasksList?.isComputingLayout)
-                    adapter.notifyItemChanged(it + 1)
+                    adapter.notifyItemChanged(it)
             }
         })
 //        viewModel.status.observe(viewLifecycleOwner, Observer {
@@ -59,7 +59,8 @@ class TasksFragment : Fragment() {
 //            binding.statusText?.text = it
 //        })
 
-        viewModel.tasksList.observe(viewLifecycleOwner, Observer {
+        viewModel.tasksList.observe(viewLifecycleOwner, Observer
+        {
             it?.apply {
                 val itemsList = viewModel.addHeadersAndTasksSequence(it)
                 Log.i("TasksFragment", (itemsList[0] is DataItem.HeaderItem).toString())

@@ -12,6 +12,7 @@ import kotlinx.coroutines.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+enum class ApiStatus {LOADING, ERROR, DONE}
 class TasksViewModel : ViewModel() {
 
     val referenceTodayDate = "2022-11-08"
@@ -25,8 +26,8 @@ class TasksViewModel : ViewModel() {
     val tomorrowDate: LiveData<String>
         get() = _tomorrowDate
 
-    private val _status = MutableLiveData<String>()
-    val status: LiveData<String>
+    private val _status = MutableLiveData<ApiStatus>()
+    val status: LiveData<ApiStatus>
         get() = _status
 
     private val _tasksList = MutableLiveData<List<Task>>()
@@ -35,8 +36,8 @@ class TasksViewModel : ViewModel() {
 
     val itemsList = mutableListOf<DataItem>()
 
-    private val _itemClicked = MutableLiveData<Int>()
-    val itemClicked : LiveData<Int>
+    private val _itemClicked = MutableLiveData<Pair<Int,Int?>>()
+    val itemClicked : LiveData<Pair<Int,Int?>>
         get() = _itemClicked
 
     private val viewModelJob = Job()
@@ -59,13 +60,14 @@ class TasksViewModel : ViewModel() {
             try {
                 //switch coroutine context to a background thread
                 withContext(Dispatchers.IO) {
+                    _status.postValue(ApiStatus.LOADING)
                     val tasksList = Network.tasksApiService.getTasks().result
-                    _status.postValue("there are ${tasksList.size} tasks received")
+                    _status.postValue(ApiStatus.DONE)
                     _tasksList.postValue(tasksList)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                _status.postValue("error retrieving the tasks")
+                _status.postValue(ApiStatus.ERROR)
             }
         }
     }
@@ -150,14 +152,15 @@ class TasksViewModel : ViewModel() {
         if(currentItem is DataItem.TaskItem){
             currentItem.isActive = false
             currentItem.task.status = "done"
+            _itemClicked.value = Pair(position, null)
         }
         if(position < itemsList.size - 1) {
             val nextItem = itemsList[position + 1]
             if(nextItem is DataItem.TaskItem){
                 nextItem.isActive = true
+                _itemClicked.value = _itemClicked.value?.copy(second = position + 1)
             }
         }
-        _itemClicked.value = position
     }
 
 }
