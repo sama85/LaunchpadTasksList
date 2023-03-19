@@ -21,7 +21,7 @@ interface TasksApiService {
         "Authorization: $TOKEN",
         "Accept-Language: ar"
     )
-    @GET(TASKS_ENDPOINT)
+    @GET(TASKS_ENDPOINT + "?relative_date__lte=0")
     suspend fun getTasks(): TaskContainer
 
 }
