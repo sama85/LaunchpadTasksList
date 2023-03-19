@@ -60,15 +60,21 @@ class TasksFragment : Fragment() {
         viewModel.status.observe(viewLifecycleOwner, Observer {
             //HOW IS IMAGE VIEW IN BINDING NULLABLE?
             when(it){
-                ApiStatus.LOADING -> {
-                    binding.statusImg?.visibility = View.VISIBLE
-                    binding.statusImg?.setImageResource(R.drawable.ic_profile)
-                }
                 ApiStatus.ERROR -> {
-                    binding.statusImg?.visibility = View.VISIBLE
-                    binding.statusImg?.setImageResource(R.drawable.ic_profile)
+                    binding.statusCard?.visibility = View.VISIBLE
+                    binding.statusCard?.setBackgroundColor(resources.getColor(R.color.light_red))
+                    binding.statusImg?.setImageResource(R.drawable.ic_error)
+                    binding.statusText1?.text = "عذرا حدث خطأً ما"
+                    binding.statusText2?.text = "برجاء اعادة المحاوله مرة اخرى"
                 }
-                else -> binding.statusImg?.visibility = View.GONE
+                ApiStatus.LOADING -> {
+                    binding.statusCard?.visibility = View.VISIBLE
+                    binding.statusCard?.setBackgroundColor(resources.getColor(R.color.light_grey))
+                    binding.statusImg?.setImageResource(R.drawable.ic_loading)
+                    binding.statusText1?.text = "انتظر، جاري تعيين الطلبات عليك"
+                    binding.statusText2?.text = "الرجاء تغيير حالتك اذا كنت غير متاح للعمل"
+                }
+                else -> binding.statusCard?.visibility = View.GONE
             }
         })
 
