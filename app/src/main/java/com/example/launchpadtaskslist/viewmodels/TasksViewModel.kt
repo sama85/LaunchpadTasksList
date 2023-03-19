@@ -163,4 +163,8 @@ class TasksViewModel : ViewModel() {
         }
     }
 
+//    fun handleClickDone(){
+//        _itemClicked.value = Pair(null,null)
+//    }
+
 }

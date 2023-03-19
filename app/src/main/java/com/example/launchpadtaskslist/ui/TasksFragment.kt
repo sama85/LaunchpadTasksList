@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.launchpadtaskslist.R
 import com.example.launchpadtaskslist.adapters.DataItem
 import com.example.launchpadtaskslist.adapters.StartButtonListener
 import com.example.launchpadtaskslist.adapters.TasksListAdapter
 import com.example.launchpadtaskslist.databinding.FragmentTasksBinding
+import com.example.launchpadtaskslist.viewmodels.ApiStatus
 import com.example.launchpadtaskslist.viewmodels.TasksViewModel
 
 class TasksFragment : Fragment() {
@@ -53,11 +55,22 @@ class TasksFragment : Fragment() {
                 if (!binding.tasksList?.isComputingLayout)
                     adapter.notifyItemChanged(it)
             }
+//            viewModel.handleClickDone()
         })
-//        viewModel.status.observe(viewLifecycleOwner, Observer {
-//            //HOW IS TEXT VIEW IN BINDING NULLABLE?
-//            binding.statusText?.text = it
-//        })
+        viewModel.status.observe(viewLifecycleOwner, Observer {
+            //HOW IS IMAGE VIEW IN BINDING NULLABLE?
+            when(it){
+                ApiStatus.LOADING -> {
+                    binding.statusImg?.visibility = View.VISIBLE
+                    binding.statusImg?.setImageResource(R.drawable.ic_profile)
+                }
+                ApiStatus.ERROR -> {
+                    binding.statusImg?.visibility = View.VISIBLE
+                    binding.statusImg?.setImageResource(R.drawable.ic_profile)
+                }
+                else -> binding.statusImg?.visibility = View.GONE
+            }
+        })
 
         viewModel.tasksList.observe(viewLifecycleOwner, Observer
         {
