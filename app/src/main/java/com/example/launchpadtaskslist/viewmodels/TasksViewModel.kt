@@ -44,12 +44,12 @@ class TasksViewModel : ViewModel() {
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     init {
-//        initializeDates()
+        initializeDates()
         getTasks()
     }
 
     private fun initializeDates() {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd")
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         _todayDate.value = LocalDate.now().format(formatter)
         _tomorrowDate.value = LocalDate.now().plusDays(1).format(formatter)
     }
@@ -122,7 +122,7 @@ class TasksViewModel : ViewModel() {
                     taskItem.task.sequenceNum = numOfTasks++
 
                     //mark first item in today's tasks as active
-                    if(tasksList[j].taskDate == referenceTodayDate && tasksList[j].sequenceNum == 0)
+                    if(tasksList[j].taskDate == _todayDate.value && tasksList[j].sequenceNum == 0)
                         taskItem.isActive = true
 
                     itemsList.add(taskItem)

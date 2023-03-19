@@ -31,22 +31,25 @@ class TasksFragment : Fragment() {
 
         val binding = FragmentTasksBinding.inflate(inflater)
 
-//        viewModel.todayDate.observe(viewLifecycleOwner, Observer {
-//            adapter = TasksListAdapter(it, viewModel.tomorrowDate.value!!)
-//            binding.tasksList?.adapter = adapter
-//        })
-
         val startButtonListener = object : StartButtonListener {
             override fun onClick(position: Int) {
                 viewModel.handleClick(position)
             }
         }
-        adapter = TasksListAdapter(
-            startButtonListener,
-            viewModel.referenceTodayDate,
-            viewModel.referenceTomorrowDate
-        )
-        binding.tasksList?.adapter = adapter
+
+        viewModel.todayDate.observe(viewLifecycleOwner, Observer {
+            adapter = TasksListAdapter(startButtonListener, it,
+                        viewModel.tomorrowDate.value!!)
+            binding.tasksList?.adapter = adapter
+           // Log.i("Tasks Fragment", "today date $it, tomorrow date: ${viewModel.tomorrowDate.value!!}")
+        })
+
+/**     FOR SIMULATING WITH MOCK START DATE       */
+//        adapter = TasksListAdapter(
+//            startButtonListener,
+//            viewModel.referenceTodayDate,
+//            viewModel.referenceTomorrowDate
+//        )
 
         viewModel.itemClicked.observe(viewLifecycleOwner, Observer {
 

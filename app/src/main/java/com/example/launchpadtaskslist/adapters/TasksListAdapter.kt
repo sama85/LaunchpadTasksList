@@ -48,7 +48,6 @@ class TasksListAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
-        getItem(position + 1)
         when (holder) {
             is TaskViewHolder -> {
                 holder.bind(item as DataItem.TaskItem, todayDate, position, listener)
