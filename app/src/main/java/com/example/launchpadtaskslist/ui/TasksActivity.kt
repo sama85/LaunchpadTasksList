@@ -13,12 +13,13 @@ class TasksActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        loadFragment(TasksFragment())
 
         binding.bottomNavBar.setOnItemSelectedListener {
             when(it.itemId){
-                R.id.tasksFragment -> loadFragment(TasksFragment())
-                R.id.accountFragment -> loadFragment(AccountFragment())
-                R.id.walletFragment -> loadFragment(WalletFragment())
+                R.id.tasks_item -> loadFragment(TasksFragment())
+                R.id.account_item -> loadFragment(AccountFragment())
+                R.id.wallet_item -> loadFragment(WalletFragment())
             }
 
             true
@@ -27,7 +28,7 @@ class TasksActivity: AppCompatActivity() {
 
     fun loadFragment(fragment: Fragment){
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.nav_host_fragment,fragment)
+        transaction.replace(R.id.main_frame,fragment)
         transaction.commit()
     }
 }
