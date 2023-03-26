@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/tasksFragment"
-        android:name="com.example.launchpadtaskslist.ui.TasksFragment"
+        android:name="com.example.launchpadtaskslist.ui.TasksListFragment"
         android:label="fragment_tasks"
-        tools:layout="@layout/fragment_tasks"/>
+        tools:layout="@layout/fragment_tasks_list"/>
 </navigation>
