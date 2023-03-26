@@ -13,7 +13,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 enum class ApiStatus { LOADING, ERROR, DONE }
-class TasksViewModel : ViewModel() {
+class TasksListViewModel : ViewModel() {
 
     val referenceTodayDate = "2022-11-08"
     val referenceTomorrowDate = "2022-11-09"

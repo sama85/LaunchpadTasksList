@@ -16,12 +16,12 @@ import com.example.launchpadtaskslist.adapters.StartButtonListener
 import com.example.launchpadtaskslist.adapters.TasksListAdapter
 import com.example.launchpadtaskslist.databinding.FragmentTasksListBinding
 import com.example.launchpadtaskslist.viewmodels.ApiStatus
-import com.example.launchpadtaskslist.viewmodels.TasksViewModel
+import com.example.launchpadtaskslist.viewmodels.TasksListViewModel
 
 class TasksListFragment : Fragment() {
 
-    private val viewModel: TasksViewModel by lazy {
-        ViewModelProvider(this).get(TasksViewModel::class.java)
+    private val viewModel: TasksListViewModel by lazy {
+        ViewModelProvider(this).get(TasksListViewModel::class.java)
     }
 
     private lateinit var adapter: TasksListAdapter
