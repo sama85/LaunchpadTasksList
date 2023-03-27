@@ -129,28 +129,32 @@ class TaskViewHolder(val binding: TaskItemViewBinding) : RecyclerView.ViewHolder
             )
         }
 
-        if(task.deliveryTime != null)
+        if (task.deliveryTime != null)
             binding.deliveryTimeText.text = "الوصول" + task.deliveryTime
         else binding.deliveryTimeText.text = "------"
 
-        if (task.taskDate != todayDate) {
-            binding.taskIdText.text = "وصل الطلب رقم #" + task.id.toString()
-            binding.taskIdText.setTextColor(
-                ContextCompat.getColor(
-                    binding.root.context,
-                    R.color.grey_custom
-                )
-            )
-        } else
-            binding.taskIdText.text = "تأكيد استلام الطلبات"
-
         // set button visibilty according to isActive property
         when (taskItem.isActive) {
-            true ->{
+            true -> {
                 binding.startBtn.visibility = View.VISIBLE
-
+                binding.taskIdText.text = "تأكيد استلام الطلبات"
+                binding.taskIdText.setTextColor(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        R.color.black
+                    )
+                )
             }
-            else -> binding.startBtn.visibility = View.GONE
+            else -> {
+                binding.startBtn.visibility = View.GONE
+                binding.taskIdText.text = "وصل الطلب رقم #" + task.id.toString()
+                binding.taskIdText.setTextColor(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        R.color.grey_custom
+                    )
+                )
+            }
         }
         //vm handles clicked items and modify their data, then fragment notify adapter of items changed to rebind
         binding.startBtn.setOnClickListener {
