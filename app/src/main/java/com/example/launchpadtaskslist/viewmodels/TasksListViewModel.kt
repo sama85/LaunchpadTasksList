@@ -13,6 +13,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 enum class ApiStatus { LOADING, ERROR, DONE }
+enum class RelativeDate { CURRENT, FUTURE }
 class TasksListViewModel : ViewModel() {
 
     val referenceTodayDate = "2022-11-08"
@@ -45,7 +46,7 @@ class TasksListViewModel : ViewModel() {
 
     init {
         initializeDates()
-        getTasks()
+        getTasks(RelativeDate.CURRENT)
     }
 
     private fun initializeDates() {
@@ -55,17 +56,28 @@ class TasksListViewModel : ViewModel() {
     }
 
     // use network api to fetch data and initialize ui live data to be displayed
-    private fun getTasks() {
+    fun getTasks(relativeDate: RelativeDate) {
+        lateinit var tasksList: List<Task>
         coroutineScope.launch {
             try {
                 //switch coroutine context to a background thread
                 withContext(Dispatchers.IO) {
-                    _status.postValue(ApiStatus.LOADING)
-                    val tasksList = Network.tasksApiService.getTasks().result
-                    if (tasksList.isEmpty()) _status.postValue(ApiStatus.ERROR)
-                    else {
-                        _status.postValue(ApiStatus.DONE)
-                        _tasksList.postValue(tasksList)
+                    when(relativeDate){
+                        RelativeDate.CURRENT -> {
+                            _status.postValue(ApiStatus.LOADING)
+                            tasksList = Network.tasksApiService.getCurrentTasks().result
+                            if (tasksList.isEmpty()) _status.postValue(ApiStatus.ERROR)
+                            else{
+                                _status.postValue(ApiStatus.DONE)
+                                _tasksList.postValue(tasksList)
+                            }
+                        }
+                        else -> {
+                            tasksList = Network.tasksApiService.getFutureTasks().result
+                            _status.postValue(ApiStatus.DONE)
+                            if(_tasksList.value == null) _tasksList.postValue(tasksList)
+                            else _tasksList.postValue(_tasksList.value?.plus(tasksList))
+                        }
                     }
                 }
             } catch (e: Exception) {
@@ -141,6 +153,7 @@ class TasksListViewModel : ViewModel() {
                 if (j == tasksList.size - 1) {
                     val header = Header(headerId++, currentDate, numOfTasks)
                     itemsList.add(i + headerId - 1, DataItem.HeaderItem(header))
+                    return itemsList
                 }
             }
             ++i

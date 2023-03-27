@@ -146,7 +146,10 @@ class TaskViewHolder(val binding: TaskItemViewBinding) : RecyclerView.ViewHolder
 
         // set button visibilty according to isActive property
         when (taskItem.isActive) {
-            true -> binding.startBtn.visibility = View.VISIBLE
+            true ->{
+                binding.startBtn.visibility = View.VISIBLE
+
+            }
             else -> binding.startBtn.visibility = View.GONE
         }
         //vm handles clicked items and modify their data, then fragment notify adapter of items changed to rebind

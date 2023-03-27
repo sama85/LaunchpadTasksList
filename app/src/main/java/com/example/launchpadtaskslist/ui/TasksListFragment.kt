@@ -16,6 +16,7 @@ import com.example.launchpadtaskslist.adapters.StartButtonListener
 import com.example.launchpadtaskslist.adapters.TasksListAdapter
 import com.example.launchpadtaskslist.databinding.FragmentTasksListBinding
 import com.example.launchpadtaskslist.viewmodels.ApiStatus
+import com.example.launchpadtaskslist.viewmodels.RelativeDate
 import com.example.launchpadtaskslist.viewmodels.TasksListViewModel
 
 class TasksListFragment : Fragment() {
@@ -56,8 +57,9 @@ class TasksListFragment : Fragment() {
         binding.tasksList?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if(!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE){
+                if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE) {
                     Toast.makeText(context, "end of list reached", Toast.LENGTH_LONG).show()
+//                    viewModel.getTasks(RelativeDate.FUTURE)
                 }
             }
         })
@@ -73,7 +75,7 @@ class TasksListFragment : Fragment() {
         })
         viewModel.status.observe(viewLifecycleOwner, Observer {
             //HOW IS IMAGE VIEW IN BINDING NULLABLE?
-            when(it){
+            when (it) {
                 ApiStatus.ERROR -> {
                     binding.statusCard?.visibility = View.VISIBLE
                     binding.statusCard?.setBackgroundColor(resources.getColor(R.color.light_red))

@@ -10,6 +10,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
+import retrofit2.http.Query
 
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
@@ -26,8 +27,15 @@ interface TasksApiService {
      * relative date of today -> 0
      * relative date of future dates -> +ve (> 0)
      */
-    @GET(TASKS_ENDPOINT + "?relative_date__lte=0")
-    suspend fun getTasks(): TaskContainer
+    @GET("$TASKS_ENDPOINT?relative_date__lte=0")
+    suspend fun getCurrentTasks(): TaskContainer
+
+    @Headers(
+        "Authorization: $TOKEN",
+        "Accept-Language: ar"
+    )
+    @GET("$TASKS_ENDPOINT?relative_date__gt=0")
+    suspend fun getFutureTasks(): TaskContainer
 
 }
 
