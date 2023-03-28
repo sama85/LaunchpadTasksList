@@ -62,12 +62,12 @@ class TasksListViewModel : ViewModel() {
             try {
                 //switch coroutine context to a background thread
                 withContext(Dispatchers.IO) {
-                    when(relativeDate){
+                    when (relativeDate) {
                         RelativeDate.CURRENT -> {
                             _status.postValue(ApiStatus.LOADING)
                             tasksList = Network.tasksApiService.getCurrentTasks().result
                             if (tasksList.isEmpty()) _status.postValue(ApiStatus.ERROR)
-                            else{
+                            else {
                                 _status.postValue(ApiStatus.DONE)
                                 _tasksList.postValue(tasksList)
                             }
@@ -75,7 +75,7 @@ class TasksListViewModel : ViewModel() {
                         else -> {
                             tasksList = Network.tasksApiService.getFutureTasks().result
                             _status.postValue(ApiStatus.DONE)
-                            if(_tasksList.value == null) _tasksList.postValue(tasksList)
+                            if (_tasksList.value == null) _tasksList.postValue(tasksList)
                             else _tasksList.postValue(_tasksList.value?.plus(tasksList))
                         }
                     }
@@ -87,38 +87,6 @@ class TasksListViewModel : ViewModel() {
         }
     }
 
-
-    fun addHeaders(tasksList: List<Task>): List<DataItem> {
-        var headerId = 0
-        var insertPos = 0
-        var currentDate = tasksList[0].taskDate
-        var numOfTasks = 1
-        val taskItemList = tasksList.map {
-            DataItem.TaskItem(it)
-        }
-        val itemsList: MutableList<DataItem> = taskItemList.toMutableList()
-
-//        Log.i("TasksViewModel", (itemsList[0] as DataItem.TaskItem).task.taskDate)
-
-        for (i in 0 until tasksList.size) {
-            if (i < tasksList.size - 1 &&
-                tasksList[i].taskDate != tasksList[i + 1].taskDate
-            ) {
-                val header = Header(headerId++, currentDate, numOfTasks)
-                itemsList.add(insertPos, DataItem.HeaderItem(header))
-                insertPos = i + 1 + headerId
-                numOfTasks = 1
-                currentDate = tasksList[i + 1].taskDate
-
-            } else {
-                numOfTasks++
-            }
-        }
-        return itemsList
-    }
-
-    // taskslist:   d1 d1 d2 d2 d3 d3 d3
-    //              h1 d1 d1 d2
     fun addHeadersAndTasksSequence(tasksList: List<Task>): List<DataItem> {
 
         if (tasksList.isEmpty()) return emptyList<DataItem>()
@@ -158,8 +126,6 @@ class TasksListViewModel : ViewModel() {
             }
             ++i
         }
-        Log.i("tasks vm", "task list size : ${tasksList.size}")
-        Log.i("tasks vm", "item list size : ${itemsList.size}")
 
         return itemsList
     }
@@ -179,9 +145,4 @@ class TasksListViewModel : ViewModel() {
             }
         }
     }
-
-//    fun handleClickDone(){
-//        _itemClicked.value = Pair(null,null)
-//    }
-
 }

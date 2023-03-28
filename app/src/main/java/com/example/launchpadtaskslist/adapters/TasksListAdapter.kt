@@ -144,6 +144,8 @@ class TaskViewHolder(val binding: TaskItemViewBinding) : RecyclerView.ViewHolder
                         R.color.black
                     )
                 )
+                binding.sequenceImg.visibility = View.VISIBLE
+                binding.sequeneceText.visibility = View.INVISIBLE
             }
             else -> {
                 binding.startBtn.visibility = View.GONE
@@ -154,6 +156,9 @@ class TaskViewHolder(val binding: TaskItemViewBinding) : RecyclerView.ViewHolder
                         R.color.grey_custom
                     )
                 )
+                binding.sequenceImg.visibility = View.INVISIBLE
+                binding.sequeneceText.text = task.sequenceNum.toString()
+                binding.sequeneceText.visibility = View.VISIBLE
             }
         }
         //vm handles clicked items and modify their data, then fragment notify adapter of items changed to rebind

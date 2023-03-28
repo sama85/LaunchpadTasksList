@@ -26,14 +26,19 @@ class TasksListFragment : Fragment() {
     }
 
     private lateinit var adapter: TasksListAdapter
+    lateinit var binding: FragmentTasksListBinding
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        val binding = FragmentTasksListBinding.inflate(inflater)
+        binding = FragmentTasksListBinding.inflate(inflater)
 
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val startButtonListener = object : StartButtonListener {
             override fun onClick(position: Int) {
                 viewModel.handleClick(position)
@@ -59,7 +64,7 @@ class TasksListFragment : Fragment() {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE) {
                     Toast.makeText(context, "end of list reached", Toast.LENGTH_LONG).show()
-//                    viewModel.getTasks(RelativeDate.FUTURE)
+                    viewModel.getTasks(RelativeDate.FUTURE)
                 }
             }
         })
@@ -68,13 +73,11 @@ class TasksListFragment : Fragment() {
 
             if (!binding.tasksList?.isComputingLayout!!) adapter.notifyItemChanged(it.first)
             it.second?.let {
-                if (!binding.tasksList?.isComputingLayout)
+                if (!binding.tasksList?.isComputingLayout!!)
                     adapter.notifyItemChanged(it)
             }
-//            viewModel.handleClickDone()
         })
         viewModel.status.observe(viewLifecycleOwner, Observer {
-            //HOW IS IMAGE VIEW IN BINDING NULLABLE?
             when (it) {
                 ApiStatus.ERROR -> {
                     binding.statusCard?.visibility = View.VISIBLE
@@ -98,12 +101,8 @@ class TasksListFragment : Fragment() {
         {
             it?.apply {
                 val itemsList = viewModel.addHeadersAndTasksSequence(it)
-                Log.i("TasksFragment", (itemsList[0] is DataItem.HeaderItem).toString())
-                Log.i("TasksFragment", (itemsList[1] is DataItem.HeaderItem).toString())
-                Log.i("TasksFragment", (itemsList[2] is DataItem.HeaderItem).toString())
                 adapter.submitList(itemsList)
             }
         })
-        return binding.root
     }
 }
