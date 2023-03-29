@@ -1,7 +1,6 @@
 package com.example.launchpadtaskslist.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.launchpadtaskslist.R
-import com.example.launchpadtaskslist.adapters.DataItem
 import com.example.launchpadtaskslist.adapters.StartButtonListener
 import com.example.launchpadtaskslist.adapters.TasksListAdapter
 import com.example.launchpadtaskslist.databinding.FragmentTasksListBinding
@@ -97,11 +95,23 @@ class TasksListFragment : Fragment() {
             }
         })
 
-        viewModel.tasksList.observe(viewLifecycleOwner, Observer
+        viewModel.currentTasksList.observe(viewLifecycleOwner, Observer
         {
             it?.apply {
-                val itemsList = viewModel.addHeadersAndTasksSequence(it)
-                adapter.submitList(itemsList)
+                viewModel.addHeadersAndTasksSequence(it)
+            }
+        })
+
+        viewModel.futureTasksList.observe(viewLifecycleOwner, Observer
+        {
+            it?.apply {
+                viewModel.addHeadersAndTasksSequence(it)
+            }
+        })
+
+        viewModel.itemsList.observe(viewLifecycleOwner, Observer {
+            it?.apply {
+                adapter.submitList(it)
             }
         })
     }

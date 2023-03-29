@@ -9,8 +9,11 @@ import androidx.lifecycle.ViewModel
 import com.example.launchpadtaskslist.adapters.DataItem
 import com.example.launchpadtaskslist.network.Network
 import kotlinx.coroutines.*
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 enum class ApiStatus { LOADING, ERROR, DONE }
 enum class RelativeDate { CURRENT, FUTURE }
@@ -31,11 +34,17 @@ class TasksListViewModel : ViewModel() {
     val status: LiveData<ApiStatus>
         get() = _status
 
-    private val _tasksList = MutableLiveData<List<Task>>()
-    val tasksList: LiveData<List<Task>>
-        get() = _tasksList
+    private val _currentTasksList = MutableLiveData<List<Task>>()
+    val currentTasksList: LiveData<List<Task>>
+        get() = _currentTasksList
 
-    val itemsList = mutableListOf<DataItem>()
+    private val _futureTasksList = MutableLiveData<List<Task>>()
+    val futureTasksList: LiveData<List<Task>>
+        get() = _futureTasksList
+
+    private val _itemsList = MutableLiveData<List<DataItem>>()
+    val itemsList: LiveData<List<DataItem>>
+        get() = _itemsList
 
     private val _itemClicked = MutableLiveData<Pair<Int, Int?>>()
     val itemClicked: LiveData<Pair<Int, Int?>>
@@ -44,13 +53,15 @@ class TasksListViewModel : ViewModel() {
     private val viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
+    private lateinit var latestTaskDate: String
+    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
     init {
         initializeDates()
         getTasks(RelativeDate.CURRENT)
     }
 
     private fun initializeDates() {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         _todayDate.value = LocalDate.now().format(formatter)
         _tomorrowDate.value = LocalDate.now().plusDays(1).format(formatter)
     }
@@ -69,16 +80,20 @@ class TasksListViewModel : ViewModel() {
                             if (tasksList.isEmpty()) _status.postValue(ApiStatus.ERROR)
                             else {
                                 _status.postValue(ApiStatus.DONE)
-                                _tasksList.postValue(tasksList)
+                                _currentTasksList.postValue(tasksList)
                             }
                         }
                         else -> {
-                            tasksList = Network.tasksApiService.getFutureTasks().result
+                            val relativeDate = calculateRelativeDate()
+                            tasksList = Network.tasksApiService.getFutureTasks(relativeDate).result
                             _status.postValue(ApiStatus.DONE)
-                            if (_tasksList.value == null) _tasksList.postValue(tasksList)
-                            else _tasksList.postValue(_tasksList.value?.plus(tasksList))
+                            _futureTasksList.postValue(tasksList)
                         }
                     }
+
+                    if (tasksList.isNotEmpty())
+                        latestTaskDate = tasksList.last().taskDate
+
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -87,9 +102,20 @@ class TasksListViewModel : ViewModel() {
         }
     }
 
-    fun addHeadersAndTasksSequence(tasksList: List<Task>): List<DataItem> {
+    fun calculateRelativeDate(): Long {
 
-        if (tasksList.isEmpty()) return emptyList<DataItem>()
+        val sdf = SimpleDateFormat("yyyy-MM-dd")
+        val todayDate = sdf.parse(_todayDate.value)
+        val lastTaskDate = sdf.parse(latestTaskDate)
+
+        val diff: Long = lastTaskDate.getTime() - todayDate.getTime()
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
+    }
+
+    fun addHeadersAndTasksSequence(tasksList: List<Task>) {
+        val itemsList = mutableListOf<DataItem>()
+
+        if (tasksList.isEmpty()) return
 
         var headerId = 0
         lateinit var currentDate: String
@@ -121,27 +147,32 @@ class TasksListViewModel : ViewModel() {
                 if (j == tasksList.size - 1) {
                     val header = Header(headerId++, currentDate, numOfTasks)
                     itemsList.add(i + headerId - 1, DataItem.HeaderItem(header))
-                    return itemsList
+                    i = j
                 }
             }
             ++i
         }
 
-        return itemsList
+        //update items list
+        if (_itemsList.value == null) _itemsList.value = itemsList
+        else _itemsList.value = _itemsList.value?.plus(itemsList)
     }
 
     fun handleClick(position: Int) {
-        val currentItem = itemsList[position]
-        if (currentItem is DataItem.TaskItem) {
-            currentItem.isActive = false
-            currentItem.task.status = "done"
-            _itemClicked.value = Pair(position, null)
-        }
-        if (position < itemsList.size - 1) {
-            val nextItem = itemsList[position + 1]
-            if (nextItem is DataItem.TaskItem) {
-                nextItem.isActive = true
-                _itemClicked.value = _itemClicked.value?.copy(second = position + 1)
+        val itemsList = _itemsList.value
+        itemsList?.let {
+            val currentItem = itemsList.get(position)
+            if (currentItem is DataItem.TaskItem) {
+                currentItem.isActive = false
+                currentItem.task.status = "done"
+                _itemClicked.value = Pair(position, null)
+            }
+            if (position < itemsList.size - 1) {
+                val nextItem = itemsList[position + 1]
+                if (nextItem is DataItem.TaskItem) {
+                    nextItem.isActive = true
+                    _itemClicked.value = _itemClicked.value?.copy(second = position + 1)
+                }
             }
         }
     }

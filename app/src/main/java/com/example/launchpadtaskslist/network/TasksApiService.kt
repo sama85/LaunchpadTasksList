@@ -30,8 +30,8 @@ interface TasksApiService {
         "Authorization: $TOKEN",
         "Accept-Language: ar"
     )
-    @GET("$TASKS_ENDPOINT?relative_date__gt=0")
-    suspend fun getFutureTasks(): TaskContainer
+    @GET(TASKS_ENDPOINT)
+    suspend fun getFutureTasks(@Query("relative_date__gt") relativeDate : Long): TaskContainer
 
 }
 
