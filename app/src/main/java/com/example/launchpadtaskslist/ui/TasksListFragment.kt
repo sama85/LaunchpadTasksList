@@ -37,6 +37,7 @@ class TasksListFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         val startButtonListener = object : StartButtonListener {
             override fun onClick(position: Int) {
                 viewModel.handleClick(position)
@@ -77,21 +78,9 @@ class TasksListFragment : Fragment() {
         })
         viewModel.status.observe(viewLifecycleOwner, Observer {
             when (it) {
-                ApiStatus.ERROR -> {
-                    binding.statusCard?.visibility = View.VISIBLE
-                    binding.statusCard?.setBackgroundColor(resources.getColor(R.color.light_red))
-                    binding.statusImg?.setImageResource(R.drawable.ic_error)
-                    binding.statusText1?.text = "عذرا حدث خطأً ما"
-                    binding.statusText2?.text = "برجاء اعادة المحاوله مرة اخرى"
-                }
-                ApiStatus.LOADING -> {
-                    binding.statusCard?.visibility = View.VISIBLE
-                    binding.statusCard?.setBackgroundColor(resources.getColor(R.color.light_grey))
-                    binding.statusImg?.setImageResource(R.drawable.ic_loading)
-                    binding.statusText1?.text = "انتظر، جاري تعيين الطلبات عليك"
-                    binding.statusText2?.text = "الرجاء تغيير حالتك اذا كنت غير متاح للعمل"
-                }
-                else -> binding.statusCard?.visibility = View.GONE
+                ApiStatus.ERROR -> displayErrorStatus()
+                ApiStatus.LOADING -> displayLoadingStatus()
+                else -> displayList()
             }
         })
 
@@ -114,5 +103,25 @@ class TasksListFragment : Fragment() {
                 adapter.submitList(it)
             }
         })
+    }
+
+    private fun displayList() {
+        binding.statusCard?.visibility = View.GONE
+    }
+
+    private fun displayLoadingStatus() {
+        binding.statusCard?.visibility = View.VISIBLE
+        binding.statusCard?.setBackgroundColor(resources.getColor(R.color.light_grey))
+        binding.statusImg?.setImageResource(R.drawable.ic_loading)
+        binding.statusText1?.text = "انتظر، جاري تعيين الطلبات عليك"
+        binding.statusText2?.text = "الرجاء تغيير حالتك اذا كنت غير متاح للعمل"
+    }
+
+    private fun displayErrorStatus() {
+        binding.statusCard?.visibility = View.VISIBLE
+        binding.statusCard?.setBackgroundColor(resources.getColor(R.color.light_red))
+        binding.statusImg?.setImageResource(R.drawable.ic_error)
+        binding.statusText1?.text = "عذرا حدث خطأً ما"
+        binding.statusText2?.text = "برجاء اعادة المحاوله مرة اخرى"
     }
 }

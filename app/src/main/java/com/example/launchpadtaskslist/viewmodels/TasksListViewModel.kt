@@ -141,7 +141,8 @@ class TasksListViewModel : ViewModel() {
                     //insert header and modify current date
                     val header = Header(headerId++, currentDate, numOfTasks)
                     itemsList.add(i + headerId - 1, DataItem.HeaderItem(header))
-                    i = j - 1
+                    if (j == tasksList.size - 1) i = j
+                    else i = j - 1
                     break
                 }
                 if (j == tasksList.size - 1) {

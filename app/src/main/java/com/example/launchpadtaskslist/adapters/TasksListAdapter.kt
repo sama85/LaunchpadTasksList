@@ -114,20 +114,9 @@ class TaskViewHolder(val binding: TaskItemViewBinding) : RecyclerView.ViewHolder
     ) {
         val task = taskItem.task
         binding.statusText.text = statusTranslation[task.status]
-        if (task.status == "done") {
-            binding.statusText.setTextColor(
-                ContextCompat.getColor(
-                    binding.root.context,
-                    R.color.green_custom
-                )
-            )
-            binding.statusText.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                R.drawable.ic_done,
-                0,
-                0,
-                0
-            )
-        }
+
+        if (task.status == "done")
+            displayDoneTask()
 
         if (task.deliveryTime != null)
             binding.deliveryTimeText.text = "الوصول" + task.deliveryTime
@@ -135,36 +124,56 @@ class TaskViewHolder(val binding: TaskItemViewBinding) : RecyclerView.ViewHolder
 
         // set button visibilty according to isActive property
         when (taskItem.isActive) {
-            true -> {
-                binding.startBtn.visibility = View.VISIBLE
-                binding.taskIdText.text = "تأكيد استلام الطلبات"
-                binding.taskIdText.setTextColor(
-                    ContextCompat.getColor(
-                        binding.root.context,
-                        R.color.black
-                    )
-                )
-                binding.sequenceImg.visibility = View.VISIBLE
-                binding.sequeneceText.visibility = View.INVISIBLE
-            }
-            else -> {
-                binding.startBtn.visibility = View.GONE
-                binding.taskIdText.text = "وصل الطلب رقم #" + task.id.toString()
-                binding.taskIdText.setTextColor(
-                    ContextCompat.getColor(
-                        binding.root.context,
-                        R.color.grey_custom
-                    )
-                )
-                binding.sequenceImg.visibility = View.INVISIBLE
-                binding.sequeneceText.text = task.sequenceNum.toString()
-                binding.sequeneceText.visibility = View.VISIBLE
-            }
+
+            true -> displayActiveTask()
+            else -> displayInactiveTask(task)
         }
         //vm handles clicked items and modify their data, then fragment notify adapter of items changed to rebind
         binding.startBtn.setOnClickListener {
             listener.onClick(position)
         }
+    }
+
+    private fun displayDoneTask() {
+        binding.statusText.setTextColor(
+            ContextCompat.getColor(
+                binding.root.context,
+                R.color.green_custom
+            )
+        )
+        binding.statusText.setCompoundDrawablesRelativeWithIntrinsicBounds(
+            R.drawable.ic_done,
+            0,
+            0,
+            0
+        )
+    }
+
+    private fun displayInactiveTask(task: Task) {
+        binding.startBtn.visibility = View.GONE
+        binding.taskIdText.text = "وصل الطلب رقم #" + task.id.toString()
+        binding.taskIdText.setTextColor(
+            ContextCompat.getColor(
+                binding.root.context,
+                R.color.grey_custom
+            )
+        )
+        binding.sequenceImg.visibility = View.INVISIBLE
+        binding.sequeneceText.text = task.sequenceNum.toString()
+        binding.sequeneceText.visibility = View.VISIBLE
+    }
+
+    private fun displayActiveTask() {
+        binding.startBtn.visibility = View.VISIBLE
+        binding.taskIdText.text = "تأكيد استلام الطلبات"
+        binding.taskIdText.setTextColor(
+            ContextCompat.getColor(
+                binding.root.context,
+                R.color.black
+            )
+        )
+        binding.sequenceImg.visibility = View.VISIBLE
+        binding.sequeneceText.visibility = View.INVISIBLE
     }
 }
 
